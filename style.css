@@ -3,6 +3,7 @@ margin:0;
 padding:0;
 box-sizing:border-box;
 font-family:'Poppins',sans-serif;
+line-height:1.6;
 }
 html, body {
   overflow-x: hidden;
@@ -52,7 +53,7 @@ font-weight:500;
 background:#3FA796;
 color:white;
 padding:8px 16px;
-border-radius:6px;
+border-radius:6px;  
 
 }
 
@@ -519,9 +520,9 @@ color:#8fd3b5;
 
 }
 .footer .instagram-link:hover{
-  color:#8fd3b5;
+  color:#3FA796;
 background-color: #4e3c84 ;
-border: 1px solid #8fd3b5 ;
+border: 1px solid #3FA796 ;
 }
 
 .instagram-link{
@@ -530,7 +531,7 @@ display:inline-block;
 
 margin-top:10px;
 
-background:#8fd3b5;
+background:#3FA796;
 
 color:#333;
 
