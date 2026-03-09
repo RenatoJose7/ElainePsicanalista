@@ -144,16 +144,15 @@ border-radius:6px;
 .hero-content{
 
   position: relative;
-
   max-width: 520px;
-
+  overflow-wrap:break-word;
   color: white;
 
 }
 
 .hero-content h1{
 
-  font-size: 48px;
+  font-size:clamp(32px,6vw,56px);
 
   margin-bottom: 20px;
 
@@ -754,3 +753,56 @@ margin-bottom:10px;
   margin-bottom:8px;
   line-height:1.6;
 }
+
+
+
+/* teste responsividade */
+@media (max-width:768px){
+
+h1,h2,h3{
+text-align:center;
+}
+
+p{
+text-align:center;
+margin:auto;
+}
+
+.hero{
+min-height:90vh;
+padding:80px 20px;
+display:flex;
+align-items:center;
+}
+
+.hero-content{
+text-align:center;
+max-width:340px;
+margin:auto;
+}
+
+.hero-content h1{
+font-size:36px;
+line-height:1.2;
+margin-bottom:18px;
+}
+
+.hero-content p{
+font-size:16px;
+line-height:1.5;
+margin-bottom:28px;
+}
+
+.hero-buttons{
+flex-direction:column;
+gap:12px;
+}
+
+.hero-buttons a{
+width:100%;
+}
+.hero h1{
+font-size:34px;
+}
+
+} 
