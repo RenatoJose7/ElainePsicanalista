@@ -9,7 +9,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 
@@ -30,7 +30,10 @@
 <body>
   <header class="header">
     <div class="container-header">
-      <div class="logo">Elainne Andrade</div>
+      <a href="#topo" class="logo" aria-label="Elainne Andrade - início">
+        <span>Elainne Andrade</span>
+        <small>Psicanálise</small>
+      </a>
 
       <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
         <span></span>
@@ -39,6 +42,7 @@
       <nav class="menu" aria-label="Navegação principal">
         <a href="#sobre">Sobre</a>
         <a href="#terapia">Terapia</a>
+        <a href="#como-funciona">Como funciona</a>
         <a href="#planos">Planos</a>
         <a href="#faq">Perguntas</a>
         <a href="#contato" class="btn-menu">Agendar</a>
@@ -46,171 +50,263 @@
     </div>
   </header>
 
-  <main>
-    <section class="hero-sobre">
-      <div class="hero-overlay"></div>
+  <main id="topo">
+    <section class="hero editorial-pattern" aria-label="Apresentação">
+      <div class="hero-noise" aria-hidden="true"></div>
 
-      <div class="hero-content">
-        <h1>Psicanálise para compreender sua história</h1>
+      <div class="hero-grid">
+        <div class="hero-copy fade">
+          <span class="kicker">Atendimento online</span>
 
-        <p>
-          Um espaço seguro para falar, compreender emoções
-          e transformar padrões internos.
-        </p>
+          <h1>Psicanálise para compreender sua história</h1>
 
-        <div class="hero-buttons">
-          <a href="https://wa.me/5511989873469" class="btn-primary" target="_blank" rel="noopener">
-            Agendar primeira conversa
-          </a>
+          <p>
+            Um espaço seguro para falar, compreender emoções
+            e transformar padrões internos.
+          </p>
 
-          <a href="#como-funciona" class="btn-secondary">
-            Saiba como funciona
-          </a>
+          <div class="hero-actions">
+            <a href="https://wa.me/5511989873469" class="btn-primary" target="_blank" rel="noopener">
+              Agendar primeira conversa
+            </a>
+
+            <a href="#como-funciona" class="btn-ghost">
+              Saiba como funciona
+            </a>
+          </div>
+
+          <div class="hero-signals" aria-label="Informações do atendimento">
+            <span>Escuta terapêutica</span>
+            <span>Sessões individuais</span>
+            <span>Sigilo e privacidade</span>
+          </div>
+        </div>
+
+        <div class="hero-media fade">
+          <div class="portrait-frame">
+            <img src="img/heroimg.png" alt="Elainne Andrade">
+          </div>
+
+          <div class="hero-photo-cards" aria-label="Destaques do atendimento">
+            <div class="floating-card card-bottom">
+              <strong>Online</strong>
+              <span>Conforto e privacidade para o seu processo.</span>
+            </div>
+          </div>
+        </div>
         </div>
       </div>
     </section>
 
-    <section id="sobre" class="sobre fade">
-      <div class="sobre-container">
-        <div class="sobre-img">
-          <img src="img/elainne.jpeg" alt="Elainne Andrade">
+    <section class="manifesto fade" aria-label="Frase de acolhimento">
+      <div class="manifesto-inner">
+        <span>Escuta · História · Processo</span>
+        <h2>Um espaço seguro para você ser ouvido</h2>
+      </div>
+    </section>
+
+    <section id="sobre" class="sobre editorial-pattern fade">
+      <div class="section-label">Sobre</div>
+
+      <div class="sobre-heading">
+        <span class="kicker">Sobre</span>
+        <h2>Elainne Andrade</h2>
+        <p>Psicanálise Clínica, acolhimento e escuta cuidadosa.</p>
+      </div>
+
+      <div class="sobre-stack">
+        <div class="sobre-top">
+          <aside class="sobre-image-wrap">
+            <div class="sobre-image">
+              <img src="img/elainne.png" alt="Elainne Andrade">
+            </div>
+          </aside>
+
+          <div class="copy-block copy-large">
+            <p>
+              Muitas pessoas chegam à terapia carregando dúvidas, ansiedade e a sensação de que estão repetindo padrões na vida sem entender o motivo.
+            </p>
+
+            <p>
+              Meu trabalho como psicanalista é oferecer um espaço de escuta profunda, acolhimento e reflexão, onde você possa falar livremente sobre sua história, emoções e experiências.
+            </p>
+
+            <p>
+              A psicanálise permite compreender aquilo que muitas vezes está no inconsciente: sentimentos reprimidos, conflitos internos e experiências que continuam influenciando nossas escolhas e relações.
+            </p>
+          </div>
         </div>
 
-        <div class="sobre-text">
-          <h2>Um espaço seguro para você ser ouvido</h2>
+        <div class="sobre-bottom">
+          <div class="formation-panel">
+            <div class="formation-title">
+              <span>Formação</span>
+              <h2>Base profissional para uma escuta cuidadosa</h2>
+            </div>
 
-          <p>
-            Muitas pessoas chegam à terapia carregando dúvidas, ansiedade e a sensação de que estão repetindo padrões na vida sem entender o motivo.
-          </p>
+            <ul class="formation-grid">
+              <li>
+                <span>01</span>
+                <strong>Psicanálise Clínica</strong>
+              </li>
+              <li>
+                <span>02</span>
+                <strong>Pedagogia</strong>
+              </li>
+              <li>
+                <span>03</span>
+                <strong>Especialização em Neurociência e Comportamento</strong>
+              </li>
+              <li>
+                <span>04</span>
+                <strong>Formação em Constelação Familiar</strong>
+              </li>
+            </ul>
+          </div>
 
-          <p>
-            Meu trabalho como psicanalista é oferecer um espaço de escuta profunda, acolhimento e reflexão, onde você possa falar livremente sobre sua história, emoções e experiências.
-          </p>
-
-          <p>
-            A psicanálise permite compreender aquilo que muitas vezes está no inconsciente: sentimentos reprimidos, conflitos internos e experiências que continuam influenciando nossas escolhas e relações.
-          </p>
-
-          <h2 class="tituloFormacao">Formação</h2>
-
-          <ul class="lista-formacao">
-            <li>Psicanálise Clínica</li>
-            <li>Pedagogia</li>
-            <li>Especialização em Neurociência e Comportamento</li>
-            <li>Formação em Constelação Familiar</li>
-          </ul>
-
-          <p>
-            Acredito profundamente que quando compreendemos nossa própria história, ganhamos mais liberdade emocional para viver com mais equilíbrio, consciência e autenticidade.
-          </p>
+          <div class="closing-note">
+            <p>
+              "Acredito profundamente que quando compreendemos nossa própria história, ganhamos mais liberdade emocional para viver com mais equilíbrio, consciência e autenticidade."
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="ajuda fade" id="terapia">
-      <div class="container">
-        <h2>Quando a Terapia pode ajudar</h2>
+    <section class="terapia fade" id="terapia">
+      <div class="section-heading split-heading">
+        <div>
+          <span class="kicker">Terapia</span>
+          <h2>Quando a Terapia <br>pode ajudar</h2>
+        </div>
 
         <p class="ajuda-subtitulo">
           Muitas vezes buscamos ajuda quando sentimos que algo não está bem
           dentro de nós. A terapia pode ajudar em diversos momentos da vida.
         </p>
+      </div>
 
-        <div class="ajuda-grid">
-          <div class="ajuda-card">
+      <div class="therapy-board">
+        <article class="therapy-card tall">
+          <span class="number">01</span>
+          <div>
             <h3>Ansiedade</h3>
             <p>
               Compreender as causas profundas da ansiedade e aprender a lidar
               com pensamentos repetitivos e preocupações constantes.
             </p>
           </div>
+        </article>
 
-          <div class="ajuda-card">
+        <article class="therapy-card">
+          <span class="number">02</span>
+          <div>
             <h3>Relacionamentos</h3>
             <p>
               Identificar padrões afetivos que se repetem e desenvolver
               relações mais saudáveis.
             </p>
           </div>
+        </article>
 
-          <div class="ajuda-card">
+        <article class="therapy-card soft">
+          <span class="number">03</span>
+          <div>
             <h3>Autoestima</h3>
             <p>
               Reconstruir a relação consigo mesmo e fortalecer a
               confiança pessoal.
             </p>
           </div>
+        </article>
 
-          <div class="ajuda-card">
+        <article class="therapy-card wide">
+          <span class="number">04</span>
+          <div>
             <h3>Conflitos familiares</h3>
             <p>
               Entender dinâmicas familiares e encontrar novas
               formas de lidar com elas.
             </p>
           </div>
+        </article>
 
-          <div class="ajuda-card">
+        <article class="therapy-card">
+          <span class="number">05</span>
+          <div>
             <h3>Luto</h3>
             <p>
               Elaborar perdas e processar emoções difíceis
               com acolhimento.
             </p>
           </div>
+        </article>
 
-          <div class="ajuda-card">
+        <article class="therapy-card dark">
+          <span class="number">06</span>
+          <div>
             <h3>Autoconhecimento</h3>
             <p>
               Compreender sua história, emoções e padrões
               inconscientes.
             </p>
           </div>
-        </div>
+        </article>
       </div>
     </section>
 
     <section id="como-funciona" class="funciona fade">
-      <h2>Como funciona a Terapia</h2>
+      <div class="journey-heading">
+        <span class="kicker">Processo</span>
+        <h2>Como funciona a Terapia</h2>
+        <p class="section-intro">
+          O processo terapêutico acontece em um espaço seguro de escuta e reflexão.
+        </p>
+      </div>
 
-      <p class="section-intro">
-        O processo terapêutico acontece em um espaço seguro de escuta e reflexão.
-      </p>
-
-      <div class="funciona-grid">
-        <div class="info-card">
-          <div class="icon"><i class="fa-regular fa-clock"></i></div>
+      <div class="journey-line">
+        <article class="journey-item">
+          <span>01</span>
+          <i class="fa-regular fa-clock"></i>
           <h3>Tempo da sessão</h3>
           <p>Cada sessão dura aproximadamente 50 minutos.</p>
-        </div>
+        </article>
 
-        <div class="info-card">
-          <div class="icon"><i class="fa-regular fa-calendar"></i></div>
+        <article class="journey-item">
+          <span>02</span>
+          <i class="fa-regular fa-calendar"></i>
           <h3>Frequência</h3>
           <p>Geralmente os encontros acontecem uma vez por semana. Com possibilidade de horários flexíveis</p>
-        </div>
+        </article>
 
-        <div class="info-card">
-          <div class="icon"><i class="fa-solid fa-laptop"></i></div>
+        <article class="journey-item">
+          <span>03</span>
+          <i class="fa-solid fa-laptop"></i>
           <h3>Modalidade</h3>
           <p>Atendimento online com total conforto e privacidade.</p>
-        </div>
+        </article>
 
-        <div class="info-card">
-          <div class="icon"><i class="fa-solid fa-lock"></i></div>
+        <article class="journey-item">
+          <span>04</span>
+          <i class="fa-solid fa-lock"></i>
           <h3>Sigilo</h3>
           <p>Todo atendimento segue princípios éticos de confidencialidade.</p>
-        </div>
+        </article>
       </div>
     </section>
 
-    <section id="planos" class="planos fade">
-      <h2>Planos de atendimento</h2>
+    <section id="planos" class="planos editorial-pattern fade">
+      <div class="section-heading center-heading">
+        <span class="kicker">Atendimento</span>
+        <h2>Planos de atendimento</h2>
+        <p class="section-intro">
+          Escolha a forma de acompanhamento que melhor se adapta ao seu momento.
+        </p>
+      </div>
 
-      <p class="section-intro">
-        Escolha a forma de acompanhamento que melhor se adapta ao seu momento.
-      </p>
-
-      <div class="planos-grid">
-        <div class="plano-card">
+      <div class="plans-shell">
+        <article class="plan-card">
+          <div class="plan-topline"></div>
           <h3>Consulta individual</h3>
 
           <p class="descricao">
@@ -224,10 +320,11 @@
           </ul>
 
           <a href="https://wa.me/5511989873469" class="btn-primary" target="_blank" rel="noopener">Agendar</a>
-        </div>
+        </article>
 
-        <div class="plano-card destaque">
+        <article class="plan-card featured">
           <span class="tag">Mais procurado</span>
+          <div class="plan-topline"></div>
 
           <h3>Plano mensal</h3>
 
@@ -242,52 +339,55 @@
           </ul>
 
           <a href="https://wa.me/5511989873469" class="btn-primary" target="_blank" rel="noopener">Agendar</a>
-        </div>
+        </article>
       </div>
     </section>
 
-    <section class="depoimentos fade">
-      <h2>Experiências de quem já iniciou a Terapia</h2>
+    <section class="depoimentos fade" aria-label="Experiências de quem já iniciou a Terapia">
+      <div class="depo-heading">
+        <span class="kicker">Relatos</span>
+        <h2>Experiências de quem já iniciou a Terapia</h2>
+      </div>
 
       <div class="depo-grid">
-        <div class="depo-card">
-          <img src="img/pessoa1.jpg" alt="Ana M.">
-
-          <h4>Ana M.</h4>
-
+        <article class="depo-card">
+          <span class="quote">“</span>
           <p>
             "A terapia me ajudou a compreender emoções que eu carregava há anos.
             Hoje consigo lidar melhor com minhas relações e minha ansiedade."
           </p>
-        </div>
+          <h4>Ana M.</h4>
+        </article>
 
-        <div class="depo-card">
-          <img src="img/pessoa2.jpg" alt="Juliana R.">
-
-          <h4>Juliana R.</h4>
-
+        <article class="depo-card middle">
+          <span class="quote">“</span>
           <p>
             "Foi a primeira vez que senti que realmente fui escutada.
             Consegui entender muitos padrões que se repetiam na minha vida."
           </p>
-        </div>
+          <h4>Juliana R.</h4>
+        </article>
 
-        <div class="depo-card">
-          <img src="img/pessoa3.jpg" alt="Carla S.">
-
-          <h4>Carla S.</h4>
-
+        <article class="depo-card">
+          <span class="quote">“</span>
           <p>
             "Começar a terapia foi uma das decisões mais importantes que tomei.
             Hoje me sinto mais consciente das minhas emoções."
           </p>
-        </div>
+          <h4>Carla S.</h4>
+        </article>
       </div>
     </section>
 
-    <section class="faq fade" id="faq">
-      <div class="container">
-        <h2>Perguntas frequentes</h2>
+    <section class="faq editorial-pattern fade" id="faq">
+      <div class="faq-layout">
+        <div class="faq-intro">
+          <span class="kicker">Dúvidas</span>
+          <h2>Perguntas frequentes</h2>
+          <p>
+            O processo terapêutico acontece em um espaço seguro de escuta e reflexão.
+          </p>
+        </div>
 
         <div class="faq-grid">
           <div class="faq-card">
@@ -322,26 +422,25 @@
     </section>
 
     <section id="contato" class="contato fade">
-      <section class="cta-agendamento">
-        <div class="container">
-          <h2>Comece seu processo terapêutico</h2>
+      <div class="contato-inner">
+        <span class="kicker">Agendamento</span>
+        <h2>Comece seu processo terapêutico</h2>
 
-          <p>
-            Um espaço seguro de escuta para compreender sua história,
-            aliviar a ansiedade e fortalecer sua saúde emocional.
-          </p>
-        </div>
-      </section>
+        <p>
+          Um espaço seguro de escuta para compreender sua história,
+          aliviar a ansiedade e fortalecer sua saúde emocional.
+        </p>
 
-      <a href="https://wa.me/5511989873469" class="btn-primary" target="_blank" rel="noopener">
-        Conversar no WhatsApp
-      </a>
+        <a href="https://wa.me/5511989873469" class="btn-light" target="_blank" rel="noopener">
+          Conversar no WhatsApp
+        </a>
+      </div>
     </section>
   </main>
 
   <footer class="footer">
     <div class="footer-container">
-      <div class="footer-col">
+      <div class="footer-col footer-brand">
         <h3>Elainne Andrade</h3>
         <p>
           Psicanálise e escuta terapêutica para compreender emoções,
@@ -373,7 +472,8 @@
     </div>
 
     <div class="footer-bottom">
-      © 2026 Elainne Andrade - Psicanálise. Todos os direitos reservados.
+      © 2026 Elainne Andrade - Psicanálise. Todos os direitos reservados. <br>
+      Feito com carinho por: <a href="https://mirevadesign.com.br"><Strong>Mireva Design & Sistemas</Strong></a>
     </div>
   </footer>
 
