@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+.dev.vars*
+
+# Arquivos locais de pagamento, logs e ferramentas
+*.log
+node_modules/

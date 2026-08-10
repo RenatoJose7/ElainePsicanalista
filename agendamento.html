@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendamento | Elainne Andrade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="agendamento.css">
+</head>
+<body class="booking-page">
+  <main class="booking-page-main">
+    <a class="booking-home" href="index.html#planos"><i class="fa-solid fa-arrow-left"></i> Voltar aos planos</a>
+    <div class="booking-dialog booking-page-dialog">
+      <div class="booking-progress"><span class="active">1. Pacote</span><span>2. Agenda</span><span>3. Pagamento</span></div>
+      <section class="booking-step active" data-step="1">
+        <span class="kicker">Seu acompanhamento</span><h1>Monte seu pacote</h1>
+        <p class="booking-description">Você pode escolher entre 1 e 4 sessões. Pacotes têm desconto progressivo.</p>
+        <div class="booking-service"><i class="fa-regular fa-calendar"></i><span id="booking-service-name"></span><strong id="booking-unit-price"></strong></div>
+        <div class="session-counter"><button type="button" data-count="minus" aria-label="Diminuir sessões">−</button><strong><span id="session-count">1</span> sessão<span id="session-plural"></span></strong><button type="button" data-count="plus" aria-label="Aumentar sessões">+</button></div>
+        <div class="package-summary"><span>Total</span><strong id="package-total"></strong><small id="package-detail"></small></div>
+        <button type="button" class="btn-primary booking-next">Continuar para agenda <i class="fa-solid fa-arrow-right"></i></button>
+      </section>
+      <section class="booking-step" data-step="2">
+        <span class="kicker">Agendamento</span><h1>Escolha seus horários</h1><p class="booking-description" id="agenda-help"></p>
+        <div class="session-tabs" id="session-tabs"></div>
+        <div class="calendar-days" id="calendar-days"></div>
+        <div class="time-slots" id="time-slots"></div>
+        <p class="schedule-status" id="schedule-status"></p><button type="button" class="btn-primary booking-next" disabled>Ir para pagamento <i class="fa-solid fa-arrow-right"></i></button><button type="button" class="booking-back">Voltar</button>
+      </section>
+      <section class="booking-step" data-step="3">
+        <span class="kicker">Finalização</span><h1>Confirme seus dados</h1>
+        <div class="checkout-summary"><span id="checkout-service"></span><strong id="checkout-total"></strong><small id="checkout-schedules"></small></div>
+        <div class="checkout-fields"><label>Nome completo<input id="customer-name" type="text" autocomplete="name" placeholder="Como prefere ser chamado(a)?"></label><label>E-mail<input id="customer-email" type="email" autocomplete="email" placeholder="seuemail@exemplo.com"></label><label>WhatsApp<input id="customer-phone" type="tel" autocomplete="tel" placeholder="(00) 00000-0000"></label></div>
+        <div class="payment-note"><i class="fa-solid fa-lock"></i><span>Pagamento processado com segurança pelo Mercado Pago.</span></div>
+        <button type="button" class="btn-primary payment-button"><i class="fa-brands fa-pix"></i> Ir para pagamento seguro</button><p class="payment-feedback" role="alert" aria-live="polite"></p><p class="mvp-note">Você será direcionado ao ambiente seguro do Mercado Pago.</p><button type="button" class="booking-back">Voltar</button>
+      </section>
+    </div>
+  </main>
+  <script src="pricing.js" defer></script>
+  <script src="agenda.js" defer></script>
+  <script src="agendamento.js" defer></script>
+</body>
+</html>

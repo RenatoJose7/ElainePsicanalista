@@ -1,0 +1,16 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "elainepsicanalista",
+  "compatibility_date": "2026-08-10",
+  "main": "src/worker.js",
+  "assets": {
+    "directory": "./"
+  },
+  "d1_databases": [
+    {
+      "binding": "ORDERS",
+      "database_name": "elainne-agenda-test",
+      "database_id": "da90f514-c443-44cd-9d84-564766fdf154"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+.booking-page { background: linear-gradient(135deg, var(--off), var(--beige-soft)); }
+.booking-page-main { width: min(760px, calc(100% - 32px)); margin: 0 auto; padding: 42px 0 64px; }
+.booking-home { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; color: var(--brown-dark); font-size: .85rem; font-weight: 700; text-decoration: none; }
+.booking-page-dialog { width: 100%; max-height: none; margin: 0; }
+.booking-step h1 { margin: 5px 0 8px; color: var(--brown-dark); font-family: "Cormorant Garamond", Georgia, serif; font-size: clamp(2rem, 5vw, 2.8rem); line-height: 1.05; }
+@media (max-width: 680px) { .booking-page-main { width: min(100% - 24px, 760px); padding-top: 22px; }.booking-page-dialog { padding: 28px 18px; } }

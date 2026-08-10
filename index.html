@@ -304,10 +304,11 @@
         </p>
       </div>
 
-      <div class="plans-shell">
-        <article class="plan-card">
+      <div class="plans-shell plans-mvp">
+        <article class="plan-card plan-choice">
           <div class="plan-topline"></div>
-          <h3>Consulta individual</h3>
+          <span class="plan-icon"><i class="fa-regular fa-user"></i></span>
+          <h3>Terapia individual</h3>
 
           <p class="descricao">
             Indicado para quem deseja iniciar o processo terapêutico.
@@ -319,14 +320,22 @@
             <li>✓ Atendimento online</li>
           </ul>
 
-          <a href="https://wa.me/5511989873469" class="btn-primary" target="_blank" rel="noopener">Agendar</a>
+          <div class="duration-options" aria-label="Duração da sessão individual">
+            <button type="button" class="duration active" data-duration="30" data-price="39.90">30 min</button>
+            <button type="button" class="duration" data-duration="45" data-price="59.90">45 min</button>
+            <button type="button" class="duration popular" data-duration="60" data-price="75.90">60 min</button>
+          </div>
+          <p class="plan-price"><strong>R$ <span class="price-value">39,90</span></strong><span>/ sessão</span></p>
+          <a class="btn-primary booking-link" href="agendamento.html" data-booking-type="individual" data-booking-package="false">Agendar sessão</a>
+          <a class="btn-outline booking-link" href="agendamento.html" data-booking-type="individual" data-booking-package="true"><i class="fa-solid fa-cube"></i> Ver pacotes</a>
         </article>
 
-        <article class="plan-card featured">
-          <span class="tag">Mais procurado</span>
+        <article class="plan-card featured plan-choice">
+          <span class="tag">Para duas pessoas</span>
           <div class="plan-topline"></div>
 
-          <h3>Plano mensal</h3>
+          <span class="plan-icon"><i class="fa-solid fa-user-group"></i></span>
+          <h3>Terapia de casal</h3>
 
           <p class="descricao">
             Acompanhamento contínuo para evolução emocional.
@@ -338,7 +347,10 @@
             <li>✓ Processo mais consistente</li>
           </ul>
 
-          <a href="https://wa.me/5511989873469" class="btn-primary" target="_blank" rel="noopener">Agendar</a>
+          <div class="fixed-duration"><i class="fa-regular fa-clock"></i> 60 minutos</div>
+          <p class="plan-price"><strong>R$ <span class="price-value">75,90</span></strong><span>/ sessão</span></p>
+          <a class="btn-primary booking-link" href="agendamento.html" data-booking-type="casal" data-booking-package="false">Agendar sessão</a>
+          <a class="btn-outline booking-link" href="agendamento.html" data-booking-type="casal" data-booking-package="true"><i class="fa-solid fa-cube"></i> Ver pacotes</a>
         </article>
       </div>
     </section>
@@ -481,6 +493,7 @@
     <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
   </a>
 
+  <script src="pricing.js" defer></script>
   <script src="script.js" defer></script>
 </body>
 
