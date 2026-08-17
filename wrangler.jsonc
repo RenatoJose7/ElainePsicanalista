@@ -6,6 +6,9 @@
   "assets": {
     "directory": "./"
   },
+  "triggers": {
+    "crons": ["*/5 * * * *"]
+  },
   "d1_databases": [
     {
       "binding": "ORDERS",

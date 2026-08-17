@@ -40,7 +40,7 @@ function proximosDiasDisponiveis() {
 
 window.ELAINNE_AGENDA = { dias: proximosDiasDisponiveis() };
 
-window.criarHorariosDisponiveis = (dia, duracao, reservas = []) => {
+window.criarHorariosDisponiveis = (dia, duracao, reservas = [], occupiedSlots = new Set()) => {
   const minutos = (horario) => {
     const [hora, minuto] = horario.split(":").map(Number);
     return hora * 60 + minuto;
@@ -55,7 +55,8 @@ window.criarHorariosDisponiveis = (dia, duracao, reservas = []) => {
     const finalDaSessao = horario + duracao;
     const horarioDoSlot = new Date(`${dia.iso}T${texto(horario)}:00`);
     const conflita = reservas.some((reserva) => reserva.dayId === dia.id && horario < reserva.end && finalDaSessao > reserva.start);
-    if (horarioDoSlot > agora && !conflita) slots.push({ inicio: horario, fim: finalDaSessao, texto: texto(horario) });
+    const ocupadoNoBanco = Array.from({ length: duracao / 15 }, (_, index) => `${dia.id}T${texto(horario + index * 15)}`).some((key) => occupiedSlots.has(key));
+    if (horarioDoSlot > agora && !conflita && !ocupadoNoBanco) slots.push({ inicio: horario, fim: finalDaSessao, texto: texto(horario) });
   }
 
   return slots;

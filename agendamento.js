@@ -12,6 +12,7 @@ const state = {
   unitPrice: window.ELAINNE_PRICING[type][duration],
   sessions: savedDraft.package ? 4 : 1,
   schedules: [],
+  occupiedSlots: new Set(),
   activeSession: 0,
   activeDayId: window.ELAINNE_AGENDA.dias[0]?.id
 };
@@ -20,11 +21,11 @@ const money = (value) => value.toLocaleString("pt-BR", { style: "currency", curr
 const discount = () => ({ 1: 0, 2: .04, 3: .07, 4: .1 }[state.sessions] || 0);
 const label = () => state.type === "casal" ? "Terapia de casal · 60 min" : `Terapia individual · ${state.duration} min`;
 const total = () => state.unitPrice * state.sessions * (1 - discount());
-const activeDay = () => window.ELAINNE_AGENDA.dias.find((dia) => dia.id === state.activeDayId);
+const activeDay = () => window.ELAINNE_AGENDA.dias.find((day) => day.id === state.activeDayId);
 
 function showStep(step) {
-  document.querySelectorAll(".booking-step").forEach((el) => el.classList.toggle("active", Number(el.dataset.step) === step));
-  document.querySelectorAll(".booking-progress span").forEach((el, index) => el.classList.toggle("active", index + 1 === step));
+  document.querySelectorAll(".booking-step").forEach((element) => element.classList.toggle("active", Number(element.dataset.step) === step));
+  document.querySelectorAll(".booking-progress span").forEach((element, index) => element.classList.toggle("active", index + 1 === step));
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -39,8 +40,8 @@ function updatePackage() {
 
 function renderTabs() {
   document.querySelector("#session-tabs").innerHTML = Array.from({ length: state.sessions }, (_, index) => {
-    const reserva = state.schedules[index];
-    return `<button type="button" class="session-tab ${index === state.activeSession ? "active" : ""} ${reserva ? "selected" : ""}" data-session="${index}"><span>Sessão ${index + 1}</span>${reserva ? `<small>✓ ${reserva.resumo}</small>` : ""}</button>`;
+    const reservation = state.schedules[index];
+    return `<button type="button" class="session-tab ${index === state.activeSession ? "active" : ""} ${reservation ? "selected" : ""}" data-session="${index}"><span>Sessão ${index + 1}</span>${reservation ? `<small>✓ ${reservation.resumo}</small>` : ""}</button>`;
   }).join("");
   document.querySelector("#agenda-help").textContent = state.sessions === 1
     ? "Selecione o melhor dia e horário para você."
@@ -55,33 +56,44 @@ function scheduleStatus() {
   document.querySelector('[data-step="2"] .booking-next').disabled = saved !== state.sessions;
 }
 
-function horarioEmData(dia, horario) {
-  return new Date(`${dia.iso}T${String(Math.floor(horario / 60)).padStart(2, "0")}:${String(horario % 60).padStart(2, "0")}:00`).getTime();
+function timestamp(day, minutes) {
+  return new Date(`${day.iso}T${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}:00`).getTime();
 }
 
 function renderTimes() {
-  const dia = activeDay();
-  const reservas = state.schedules.filter((reserva, index) => reserva && index !== state.activeSession);
+  const day = activeDay();
+  const ownReservations = state.schedules.filter((reservation, index) => reservation && index !== state.activeSession);
   const selected = state.schedules[state.activeSession];
-  const anterior = state.schedules.slice(0, state.activeSession).filter(Boolean).at(-1);
-  const proxima = state.schedules.slice(state.activeSession + 1).find(Boolean);
-  const horarios = window.criarHorariosDisponiveis(dia, state.duration, reservas).filter((horario) => {
-    const inicio = horarioEmData(dia, horario.inicio);
-    const fim = horarioEmData(dia, horario.fim);
-    return (!anterior || inicio >= anterior.timestampEnd) && (!proxima || fim <= proxima.timestampStart);
+  const previous = state.schedules.slice(0, state.activeSession).filter(Boolean).at(-1);
+  const next = state.schedules.slice(state.activeSession + 1).find(Boolean);
+  const times = window.criarHorariosDisponiveis(day, state.duration, ownReservations, state.occupiedSlots).filter((time) => {
+    const start = timestamp(day, time.inicio);
+    const end = timestamp(day, time.fim);
+    return (!previous || start >= previous.timestampEnd) && (!next || end <= next.timestampStart);
   });
-
-  document.querySelector("#time-slots").innerHTML = horarios.length
-    ? horarios.map((horario) => {
-      const isSelected = selected?.dayId === dia.id && selected.start === horario.inicio;
-      return `<button type="button" class="time-slot ${isSelected ? "active" : ""}" aria-pressed="${isSelected}" data-start="${horario.inicio}" data-end="${horario.fim}">${horario.texto}</button>`;
+  document.querySelector("#time-slots").innerHTML = times.length
+    ? times.map((time) => {
+      const selectedNow = selected?.dayId === day.id && selected.start === time.inicio;
+      return `<button type="button" class="time-slot ${selectedNow ? "active" : ""}" aria-pressed="${selectedNow}" data-start="${time.inicio}" data-end="${time.fim}">${time.texto}</button>`;
     }).join("")
-    : '<p class="no-times">Não há horários compatíveis neste dia. Escolha uma data posterior para manter a ordem das sessões.</p>';
+    : '<p class="no-times">Não há horários compatíveis neste dia. Escolha outra data para manter a ordem das sessões.</p>';
 }
 
 function renderAvailability() {
-  document.querySelector("#calendar-days").innerHTML = window.ELAINNE_AGENDA.dias.map((dia) => `<button type="button" class="day-slot ${dia.id === state.activeDayId ? "active" : ""}" data-day-id="${dia.id}"><span>${dia.rotulo}</span><strong>${dia.data}</strong></button>`).join("");
+  document.querySelector("#calendar-days").innerHTML = window.ELAINNE_AGENDA.dias.map((day) => `<button type="button" class="day-slot ${day.id === state.activeDayId ? "active" : ""}" data-day-id="${day.id}"><span>${day.rotulo}</span><strong>${day.data}</strong></button>`).join("");
   renderTimes();
+}
+
+async function refreshAvailability() {
+  try {
+    const response = await fetch("/api/availability", { headers: { Accept: "application/json" } });
+    const result = await response.json();
+    if (!response.ok || !Array.isArray(result.busySlots)) return;
+    state.occupiedSlots = new Set(result.busySlots);
+    renderTimes();
+  } catch {
+    // O checkout continua sendo a fonte de verdade caso a consulta falhe.
+  }
 }
 
 document.querySelectorAll("[data-count]").forEach((button) => button.addEventListener("click", () => {
@@ -99,6 +111,7 @@ document.querySelectorAll(".booking-next").forEach((button) => button.addEventLi
   if (step === 1) {
     renderTabs();
     renderTimes();
+    refreshAvailability();
     showStep(2);
     return;
   }
@@ -132,8 +145,8 @@ document.querySelector("#time-slots").addEventListener("click", (event) => {
     dayId: day.id,
     start,
     end,
-    timestampStart: horarioEmData(day, start),
-    timestampEnd: horarioEmData(day, end),
+    timestampStart: timestamp(day, start),
+    timestampEnd: timestamp(day, end),
     resumo: `${day.resumo} · ${button.textContent}`,
     texto: `${day.completo}, ${button.textContent}`
   };
@@ -161,7 +174,18 @@ document.querySelector(".payment-button").addEventListener("click", async () => 
       body: JSON.stringify({ type: state.type, duration: state.duration, sessions: state.sessions, schedules: state.schedules, customer })
     });
     const result = await response.json();
-    if (!response.ok || !result.checkoutUrl) throw new Error(result.error || "Não foi possível iniciar o pagamento.");
+    if (!response.ok || !result.checkoutUrl) {
+      if (result.code === "slot_taken") {
+        state.schedules = Array(state.sessions).fill(null);
+        state.activeSession = 0;
+        renderTabs();
+        renderAvailability();
+        scheduleStatus();
+        showStep(2);
+        await refreshAvailability();
+      }
+      throw new Error(result.error || "Não foi possível iniciar o pagamento.");
+    }
     window.location.assign(result.checkoutUrl);
   } catch (error) {
     feedback.textContent = error.message;
@@ -171,6 +195,7 @@ document.querySelector(".payment-button").addEventListener("click", async () => 
 });
 
 renderAvailability();
+refreshAvailability();
 updatePackage();
 renderTabs();
 scheduleStatus();
