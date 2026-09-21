@@ -7,6 +7,19 @@ const json = (body, status = 200) => new Response(JSON.stringify(body), {
   headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }
 });
 
+const INTERNAL_PATHS = ["/functions/", "/src/", "/database/", "/.env", "/wrangler.jsonc", "/README.md", "/CLOUDFLARE_PAGES_SETUP.md"];
+
+function secureAssetResponse(response) {
+  const headers = new Headers(response.headers);
+  headers.set("Content-Security-Policy", "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-src https://www.mercadopago.com;");
+  headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  headers.set("X-Content-Type-Options", "nosniff");
+  headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  headers.set("Cross-Origin-Opener-Policy", "same-origin");
+  headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -27,7 +40,8 @@ export default {
       return receiveMercadoPagoWebhook(context);
     }
 
-    return env.ASSETS.fetch(request);
+    if (INTERNAL_PATHS.some((path) => url.pathname === path || url.pathname.startsWith(path))) return new Response("Not Found", { status: 404 });
+    return secureAssetResponse(await env.ASSETS.fetch(request));
   },
 
   async scheduled(controller, env, ctx) {

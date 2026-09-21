@@ -11,11 +11,13 @@ window.addEventListener("scroll", setHeaderState, { passive: true });
 menuToggle?.addEventListener("click", () => {
   const isOpen = header.classList.toggle("menu-open");
   menuToggle.setAttribute("aria-expanded", String(isOpen));
+  menuToggle.setAttribute("aria-label", isOpen ? "Fechar menu" : "Abrir menu");
 });
 
 menuLinks.forEach((link) => link.addEventListener("click", () => {
   header.classList.remove("menu-open");
   menuToggle?.setAttribute("aria-expanded", "false");
+  menuToggle?.setAttribute("aria-label", "Abrir menu");
 }));
 
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => anchor.addEventListener("click", (event) => {
@@ -50,7 +52,7 @@ document.querySelectorAll(".plan-choice").forEach((card) => {
     button.dataset.price = prices[type][button.dataset.duration];
   });
   const activeDuration = card.querySelector(".duration.active");
-  const price = activeDuration ? prices[type][activeDuration.dataset.duration] : prices[type][60];
+  const price = activeDuration ? prices[type][activeDuration.dataset.duration] : prices[type][50];
   card.querySelector(".price-value").textContent = price.toFixed(2).replace(".", ",");
 });
 
@@ -64,7 +66,7 @@ document.querySelectorAll(".duration").forEach((button) => button.addEventListen
 document.querySelectorAll(".booking-link").forEach((link) => link.addEventListener("click", () => {
   const card = link.closest(".plan-choice");
   const type = link.dataset.bookingType;
-  const duration = type === "casal" ? 60 : Number(card.querySelector(".duration.active").dataset.duration);
+  const duration = type === "casal" ? 50 : Number(card.querySelector(".duration.active").dataset.duration);
   const draft = { type, duration, package: link.dataset.bookingPackage === "true" };
   sessionStorage.setItem("elainne_booking_draft", JSON.stringify(draft));
 }));

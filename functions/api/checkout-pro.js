@@ -1,8 +1,9 @@
 const catalog = {
-  individual: { 30: 39.90, 45: 59.90, 60: 75.90 },
-  casal: { 60: 75.90 }
+  individual: { 30: 39.90, 50: 80.00 },
+  casal: { 50: 80.00 }
 };
 const HOLD_MINUTES = 15;
+const MIN_SESSION_INTERVAL_MS = 7 * 24 * 60 * 60 * 1000;
 const json = (body, status = 200) => new Response(JSON.stringify(body), {
   status,
   headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }
@@ -16,7 +17,7 @@ class BookingError extends Error {
   }
 }
 
-const discountFor = (sessions) => ({ 1: 0, 2: 0.04, 3: 0.07, 4: 0.10 }[sessions] ?? null);
+const discountFor = (sessions) => ({ 1: 0, 2: 0.04 }[sessions] ?? null);
 const pad = (value) => String(value).padStart(2, "0");
 const timeText = (minutes) => `${pad(Math.floor(minutes / 60))}:${pad(minutes % 60)}`;
 const slotKey = (dayId, minutes) => `${dayId}T${timeText(minutes)}`;
@@ -45,9 +46,7 @@ function validateSchedules(inputSchedules, duration, sessions) {
   if (!Array.isArray(inputSchedules) || inputSchedules.length !== sessions) throw new BookingError("Escolha todos os horarios do pacote.");
   const now = Date.now();
   const usedSlots = new Set();
-  let previousEnd = 0;
-
-  return inputSchedules.map((input) => {
+  const schedules = inputSchedules.map((input) => {
     const dayId = String(input?.dayId || "");
     const start = Number(input?.start);
     const day = weekday(dayId);
@@ -56,10 +55,7 @@ function validateSchedules(inputSchedules, duration, sessions) {
     if (!allowed || !Number.isInteger(start) || start % 15 !== 0 || start < allowed.start || start + duration > allowed.end) throw new BookingError("Horario de atendimento invalido.");
 
     const startAt = slotTimestamp(dayId, start);
-    const endAt = slotTimestamp(dayId, start + duration);
     if (startAt <= now + 5 * 60 * 1000) throw new BookingError("Escolha um horario futuro.");
-    if (previousEnd && startAt < previousEnd) throw new BookingError("As sessoes precisam estar em ordem cronologica.");
-    previousEnd = endAt;
 
     const slots = [];
     for (let minute = start; minute < start + duration; minute += 15) {
@@ -68,8 +64,16 @@ function validateSchedules(inputSchedules, duration, sessions) {
       usedSlots.add(key);
       slots.push(key);
     }
-    return { dayId, start, end: start + duration, texto: scheduleText(dayId, start), slots };
+    return { dayId, start, end: start + duration, startAt, texto: scheduleText(dayId, start), slots };
   });
+
+  const orderedSchedules = schedules.slice().sort((first, second) => first.startAt - second.startAt);
+  for (let index = 1; index < orderedSchedules.length; index += 1) {
+    if (orderedSchedules[index].startAt - orderedSchedules[index - 1].startAt < MIN_SESSION_INTERVAL_MS) {
+      throw new BookingError("O pacote permite apenas uma sessao por semana. Escolha datas com pelo menos 7 dias de intervalo.");
+    }
+  }
+  return schedules.map(({ startAt, ...schedule }) => schedule);
 }
 
 function validOrder(input) {
@@ -142,6 +146,9 @@ export async function onRequestPost(context) {
       items: [{ id: `${order.type}-${order.duration}-${order.sessions}`, title: `${title} - ${order.sessions} sessao(oes) de ${order.duration} min`, quantity: 1, currency_id: "BRL", unit_price: order.total }],
       payer: { name: order.customer.name, email: order.customer.email, phone: { number: order.customer.phone } },
       external_reference: reference,
+      expires: true,
+      expiration_date_from: createdAt,
+      expiration_date_to: holdExpiresAt,
       back_urls: { success: `${origin}/agendamento.html`, pending: `${origin}/agendamento.html`, failure: `${origin}/agendamento.html` },
       auto_return: "approved",
       notification_url: `${origin}/api/mercado-pago/webhook`

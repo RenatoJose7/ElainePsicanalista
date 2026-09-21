@@ -1,5 +1,10 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /functions/
+Disallow: /src/
+Disallow: /database/
+Disallow: /.env
+Disallow: /wrangler.jsonc
 
 Sitemap: https://elainneandradepsi.com.br/sitemap.xml

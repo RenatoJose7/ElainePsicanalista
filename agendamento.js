@@ -5,12 +5,14 @@ const readDraft = () => {
 
 const savedDraft = readDraft();
 const type = savedDraft.type === "casal" ? "casal" : "individual";
-const duration = type === "casal" ? 60 : Number(savedDraft.duration) || 30;
+const duration = type === "casal" ? 50 : Number(savedDraft.duration) || 30;
+const MAX_SESSIONS = 2;
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 const state = {
   type,
   duration,
   unitPrice: window.ELAINNE_PRICING[type][duration],
-  sessions: savedDraft.package ? 4 : 1,
+  sessions: savedDraft.package ? MAX_SESSIONS : 1,
   schedules: [],
   occupiedSlots: new Set(),
   activeSession: 0,
@@ -18,8 +20,8 @@ const state = {
 };
 
 const money = (value) => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-const discount = () => ({ 1: 0, 2: .04, 3: .07, 4: .1 }[state.sessions] || 0);
-const label = () => state.type === "casal" ? "Terapia de casal · 60 min" : `Terapia individual · ${state.duration} min`;
+const discount = () => ({ 1: 0, 2: .04 }[state.sessions] || 0);
+const label = () => state.type === "casal" ? "Terapia de casal · 50 min" : `Terapia individual · ${state.duration} min`;
 const total = () => state.unitPrice * state.sessions * (1 - discount());
 const activeDay = () => window.ELAINNE_AGENDA.dias.find((day) => day.id === state.activeDayId);
 
@@ -31,11 +33,13 @@ function showStep(step) {
 
 function updatePackage() {
   document.querySelector("#session-count").textContent = state.sessions;
-  document.querySelector("#session-plural").textContent = state.sessions > 1 ? "ões" : "";
+  document.querySelector("#session-plural").textContent = state.sessions > 1 ? "ões" : "ão";
   document.querySelector("#booking-service-name").textContent = label();
   document.querySelector("#booking-unit-price").textContent = money(state.unitPrice);
   document.querySelector("#package-total").textContent = money(total());
   document.querySelector("#package-detail").textContent = `${state.sessions} sess${state.sessions > 1 ? "ões" : "ão"}${discount() ? ` · ${Math.round(discount() * 100)}% de desconto` : " · sem desconto"}`;
+  document.querySelector('[data-count="minus"]').disabled = state.sessions === 1;
+  document.querySelector('[data-count="plus"]').disabled = state.sessions === MAX_SESSIONS;
 }
 
 function renderTabs() {
@@ -45,7 +49,7 @@ function renderTabs() {
   }).join("");
   document.querySelector("#agenda-help").textContent = state.sessions === 1
     ? "Selecione o melhor dia e horário para você."
-    : "Agende cada sessão do seu pacote em ordem cronológica antes de continuar.";
+    : "Escolha uma sessão por semana: as duas datas precisam ter pelo menos 7 dias de intervalo.";
 }
 
 function scheduleStatus() {
@@ -68,15 +72,16 @@ function renderTimes() {
   const next = state.schedules.slice(state.activeSession + 1).find(Boolean);
   const times = window.criarHorariosDisponiveis(day, state.duration, ownReservations, state.occupiedSlots).filter((time) => {
     const start = timestamp(day, time.inicio);
-    const end = timestamp(day, time.fim);
-    return (!previous || start >= previous.timestampEnd) && (!next || end <= next.timestampStart);
+    return (!previous || start - previous.timestampStart >= WEEK_MS)
+      && (!next || next.timestampStart - start >= WEEK_MS)
+      && ownReservations.every((reservation) => Math.abs(start - reservation.timestampStart) >= WEEK_MS);
   });
   document.querySelector("#time-slots").innerHTML = times.length
     ? times.map((time) => {
       const selectedNow = selected?.dayId === day.id && selected.start === time.inicio;
       return `<button type="button" class="time-slot ${selectedNow ? "active" : ""}" aria-pressed="${selectedNow}" data-start="${time.inicio}" data-end="${time.fim}">${time.texto}</button>`;
     }).join("")
-    : '<p class="no-times">Não há horários compatíveis neste dia. Escolha outra data para manter a ordem das sessões.</p>';
+    : '<p class="no-times">Não há horários compatíveis nesta data. Para o pacote, escolha uma sessão por semana, com pelo menos 7 dias de intervalo.</p>';
 }
 
 function renderAvailability() {
@@ -97,7 +102,7 @@ async function refreshAvailability() {
 }
 
 document.querySelectorAll("[data-count]").forEach((button) => button.addEventListener("click", () => {
-  state.sessions = Math.min(4, Math.max(1, state.sessions + (button.dataset.count === "plus" ? 1 : -1)));
+  state.sessions = Math.min(MAX_SESSIONS, Math.max(1, state.sessions + (button.dataset.count === "plus" ? 1 : -1)));
   state.schedules = Array(state.sessions).fill(null);
   state.activeSession = 0;
   updatePackage();
@@ -165,6 +170,10 @@ document.querySelector(".payment-button").addEventListener("click", async () => 
     phone: document.querySelector("#customer-phone").value
   };
   feedback.textContent = "";
+  if (!document.querySelector("#privacy-consent").checked) {
+    feedback.textContent = "Leia e aceite a Política de Privacidade e as orientações de agendamento para continuar.";
+    return;
+  }
   button.disabled = true;
   button.textContent = "Preparando pagamento...";
   try {
